@@ -1,0 +1,4 @@
+﻿dataset,samples,exact_match_samples,line_accuracy,character_accuracy,total_edit_distance,average_edit_distance
+sample_baseline,50,40,0.8,0.950954,18,0.36
+hard_cases,905,162,0.179006,0.324043,2595,2.867403
+full_test,128610,68803,0.534974,0.762601,188617,1.466581

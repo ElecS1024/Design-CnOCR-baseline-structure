@@ -1,0 +1,6 @@
+cnocr
+torch
+opencv-python
+pillow
+onnxruntime
+lmdb

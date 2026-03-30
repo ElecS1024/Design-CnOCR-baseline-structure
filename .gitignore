@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+env/
+venv/
+outputs/preds/*.csv
+outputs/eval/*.json
+outputs/logs/*
+data/raw/*
+data/processed/*
+data/train/*
+data/val/*
+data/test/*
+!data/sample/
+!data/sample/.gitkeep
