@@ -147,6 +147,39 @@ So the thesis can honestly conclude that the current multimodal design has imple
 - try hard-case-focused reweighting or oversampling
 - consider changing the role of the second modality from direct fusion to post-recognition correction or reranking
 
+## 2026-03-31 Baseline Correction Route
+
+### Why this route is now more important
+
+Since the current ablation result is `baseline > single_modal_v1 > dual_modal_v2`, the next experiment should focus less on replacing the baseline and more on helping it.
+
+The most suitable reframing is:
+
+- keep the strong pretrained baseline as the first-stage recognizer
+- let the second modality work as a semantic correction or reranking module
+- evaluate whether the corrected output is better than the raw baseline output
+
+### Correction data already prepared
+
+The project now contains correction-pair datasets generated from baseline prediction files:
+
+- `outputs/correction/hard_cases_correction_pairs.csv`
+- `outputs/correction/full_test_correction_pairs.csv`
+
+These files transform the OCR result into supervised correction samples:
+
+- `baseline_text` = raw baseline prediction
+- `target_text` = ground-truth label
+
+### Why hard_cases should come first
+
+The correction data summary shows:
+
+- `hard_cases`: `743 / 905` samples need correction, error ratio `0.820994`
+- `full_test`: `59807 / 128610` samples need correction, error ratio `0.465026`
+
+This means `hard_cases` is the most suitable first proving ground for the second modality, because the correction demand is much denser and the value of semantic assistance is easier to observe.
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal

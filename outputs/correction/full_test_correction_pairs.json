@@ -1,0 +1,26 @@
+{
+  "total_samples": 128610,
+  "error_samples": 59807,
+  "error_ratio": 0.465026,
+  "avg_edit_distance": 1.466581,
+  "group_counts": {
+    "bg_confusion": 104,
+    "blur": 500,
+    "document": 50000,
+    "oblique_or_curved": 100,
+    "occlusion": 101,
+    "scene": 63646,
+    "vertical_text": 100,
+    "web": 14059
+  },
+  "error_group_counts": {
+    "bg_confusion": 92,
+    "blur": 365,
+    "document": 11173,
+    "oblique_or_curved": 97,
+    "occlusion": 89,
+    "scene": 39378,
+    "vertical_text": 100,
+    "web": 8513
+  }
+}

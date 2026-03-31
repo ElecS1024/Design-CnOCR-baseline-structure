@@ -98,3 +98,21 @@
   - `baseline > single_modal_v1 > dual_modal_v2` on both `hard_cases` and `full_test`
   - the current semantic branch does not yet provide a positive gain over the matched visual-only control
   - the next optimization should focus on redesigning semantic input or hard-case-focused training rather than simply extending training time
+
+## 2026-03-31 Baseline Correction Route Started
+
+- New workflow note:
+  - `docs/dual_modal_value_proof_workflow.md`
+- New script:
+  - `scripts/11_prepare_correction_dataset.py`
+- Generated correction-pair datasets:
+  - `outputs/correction/hard_cases_correction_pairs.csv`
+  - `outputs/correction/full_test_correction_pairs.csv`
+  - `outputs/correction/hard_cases_correction_errors_only.csv`
+  - `outputs/correction/full_test_correction_errors_only.csv`
+- Current data observation:
+  - `hard_cases` baseline output has `743 / 905` error samples, error ratio `0.820994`
+  - `full_test` baseline output has `59807 / 128610` error samples, error ratio `0.465026`
+- Interpretation:
+  - the hard-cases subset is highly suitable for the first correction experiment
+  - this supports the new route of proving multimodal value through `baseline + semantic correction`
