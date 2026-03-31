@@ -31,6 +31,27 @@
   - Epoch 1: `train_loss=5.969488`, `val_line_acc=0.003093`, `val_char_acc=0.023286`
   - Epoch 2: `train_loss=3.160761`, `val_line_acc=0.010665`, `val_char_acc=0.127606`
 
+## 2026-03-31 Dual-Modal Hard Cases Result
+
+- Evaluation split: `hard_cases (905 images)`
+- Checkpoint: `outputs/dual_modal/checkpoints/best.pt`
+- Overall result:
+  - `line_acc=0.002210`
+  - `char_acc=0.019276`
+  - `avg_edit_distance=4.160221`
+- Grouped result highlights:
+  - `bg_confusion`: `line_acc=0.000000`, `char_acc=0.024000`
+  - `blur`: `line_acc=0.004000`, `char_acc=0.012491`
+  - `oblique_or_curved`: `line_acc=0.000000`, `char_acc=0.017613`
+  - `occlusion`: `line_acc=0.000000`, `char_acc=0.044964`
+  - `vertical_text`: `line_acc=0.000000`, `char_acc=0.002193`
+
+Current observation:
+
+- the current dual-modal checkpoint is still much weaker than the baseline on `hard_cases`
+- the first formal server run proves that the training path is stable, but this checkpoint is not yet strong enough to claim improvement
+- for the thesis, this result should be described honestly as an early-stage formal training result rather than a final improved model
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal

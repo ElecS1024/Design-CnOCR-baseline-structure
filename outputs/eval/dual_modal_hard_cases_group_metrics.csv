@@ -1,0 +1,8 @@
+group,samples,exact_match,line_accuracy,character_accuracy,total_edit_distance,average_edit_distance
+overall,905,2,0.002210,0.019276,3765,4.160221
+hard_cases,905,2,0.002210,0.019276,3765,4.160221
+bg_confusion,104,0,0.000000,0.024000,854,8.211538
+blur,500,2,0.004000,0.012491,1423,2.846000
+oblique_or_curved,100,0,0.000000,0.017613,502,5.020000
+occlusion,101,0,0.000000,0.044964,531,5.257426
+vertical_text,100,0,0.000000,0.002193,455,4.550000
