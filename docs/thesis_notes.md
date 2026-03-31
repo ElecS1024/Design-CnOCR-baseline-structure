@@ -97,6 +97,29 @@ Current observation:
 - `outputs/eval/dual_modal_v2_summary_table.md`
 - `outputs/eval/dual_modal_v2_group_compare.md`
 
+## 2026-03-31 Optimization Direction Update
+
+### Why another experiment is needed
+
+- The current `dual_modal_v2` result is still below the pretrained baseline.
+- Therefore, the thesis should not directly claim that adding a dual-modal module has already improved the full system.
+- A more rigorous next step is to add a `single_modal` control experiment under the same training framework.
+
+### Controlled ablation logic
+
+- `baseline`: pretrained CnOCR reference model
+- `single_modal`: same visual encoder and CTC pipeline as the current dual-modal experiment, but without semantic branch or gated fusion
+- `dual_modal`: visual branch + semantic branch + gated fusion
+
+If the result shows `single_modal < dual_modal`, then the thesis can reasonably argue that the second modality provides positive value inside the new architecture, even if the overall system still has not exceeded the original baseline.
+
+### Recommended thesis framing
+
+- First, establish the baseline and identify the hard-case bottleneck.
+- Second, present the dual-modal design.
+- Third, add a single-modal ablation experiment.
+- Finally, analyze whether the semantic branch improves the model on difficult subsets such as `vertical_text`, `oblique_or_curved`, and `occlusion`.
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal

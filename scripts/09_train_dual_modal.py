@@ -18,7 +18,7 @@ if str(ROOT) not in sys.path:
 from experiments.dual_modal.data import OCRImageDataset, collate_batch
 from experiments.dual_modal.metrics import compute_metrics
 from experiments.dual_modal.tokenizer import OCRTokenizer
-from models.dual_modal_ocr import DualModalOCR
+from models.dual_modal_ocr import DualModalOCR, SingleModalOCR
 
 
 def ctc_decode(logits: torch.Tensor, tokenizer: OCRTokenizer) -> tuple[list[str], list[float]]:
@@ -41,10 +41,11 @@ def ctc_decode(logits: torch.Tensor, tokenizer: OCRTokenizer) -> tuple[list[str]
 
 
 def evaluate(
-    model: DualModalOCR,
+    model: torch.nn.Module,
     dataloader: DataLoader,
     tokenizer: OCRTokenizer,
     device: torch.device,
+    mode: str,
     output_file: Path | None = None,
 ) -> dict[str, float | int]:
     model.eval()
@@ -53,7 +54,8 @@ def evaluate(
         for batch in dataloader:
             images = batch["images"].to(device)
             outputs = model(images)
-            pred_texts, scores = ctc_decode(outputs.fused_logits, tokenizer)
+            logits = outputs.fused_logits if mode == "dual" else outputs.logits
+            pred_texts, scores = ctc_decode(logits, tokenizer)
             for filename, gt_text, pred_text, score in zip(
                 batch["filenames"], batch["texts"], pred_texts, scores
             ):
@@ -81,12 +83,13 @@ def evaluate(
 def main() -> int:
     parser = argparse.ArgumentParser(description="Train a dual-modal OCR experiment model.")
     root = ROOT
+    parser.add_argument("--mode", choices=["dual", "single"], default="dual")
     parser.add_argument("--train-dir", default=str(root / "data" / "train"))
     parser.add_argument("--train-labels", default=str(root / "data" / "labels_train.csv"))
     parser.add_argument("--val-dir", default=str(root / "data" / "val"))
     parser.add_argument("--val-labels", default=str(root / "data" / "labels_val.csv"))
     parser.add_argument("--test-labels", default=str(root / "data" / "labels_test.csv"))
-    parser.add_argument("--output-dir", default=str(root / "outputs" / "dual_modal"))
+    parser.add_argument("--output-dir", default="")
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
@@ -104,7 +107,8 @@ def main() -> int:
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    output_dir = Path(args.output_dir)
+    default_output_dir = root / "outputs" / ("dual_modal" if args.mode == "dual" else "single_modal")
+    output_dir = Path(args.output_dir) if args.output_dir else default_output_dir
     checkpoint_dir = output_dir / "checkpoints"
     pred_dir = output_dir / "preds"
     eval_dir = output_dir / "eval"
@@ -149,11 +153,17 @@ def main() -> int:
         collate_fn=collate_batch,
     )
 
-    model = DualModalOCR(
-        vocab_size=tokenizer.vocab_size,
-        hidden_size=args.hidden_size,
-        embed_dim=args.embed_dim,
-    ).to(device)
+    if args.mode == "dual":
+        model = DualModalOCR(
+            vocab_size=tokenizer.vocab_size,
+            hidden_size=args.hidden_size,
+            embed_dim=args.embed_dim,
+        ).to(device)
+    else:
+        model = SingleModalOCR(
+            vocab_size=tokenizer.vocab_size,
+            hidden_size=args.hidden_size,
+        ).to(device)
     optimizer = AdamW(model.parameters(), lr=args.learning_rate)
     ctc_loss = nn.CTCLoss(blank=tokenizer.blank_id, zero_infinity=True)
 
@@ -176,23 +186,38 @@ def main() -> int:
         steps_ran = 0
         for step, batch in enumerate(train_loader, start=1):
             images = batch["images"].to(device)
-            semantic_ids = batch["semantic_ids"].to(device)
             targets = batch["targets"].to(device)
             target_lengths = batch["target_lengths"].to(device)
-
-            outputs = model(images, semantic_ids=semantic_ids)
-            visual_log_probs = outputs.visual_logits.log_softmax(dim=-1).permute(1, 0, 2)
-            fused_log_probs = outputs.fused_logits.log_softmax(dim=-1).permute(1, 0, 2)
             input_lengths = torch.full(
                 (images.size(0),),
-                outputs.fused_logits.size(1),
+                images.size(-1) // 4,
                 dtype=torch.long,
                 device=device,
             )
-
-            visual_loss = ctc_loss(visual_log_probs, targets, input_lengths, target_lengths)
-            fused_loss = ctc_loss(fused_log_probs, targets, input_lengths, target_lengths)
-            loss = fused_loss + args.aux_ctc_weight * visual_loss
+            if args.mode == "dual":
+                semantic_ids = batch["semantic_ids"].to(device)
+                outputs = model(images, semantic_ids=semantic_ids)
+                visual_log_probs = outputs.visual_logits.log_softmax(dim=-1).permute(1, 0, 2)
+                fused_log_probs = outputs.fused_logits.log_softmax(dim=-1).permute(1, 0, 2)
+                input_lengths = torch.full(
+                    (images.size(0),),
+                    outputs.fused_logits.size(1),
+                    dtype=torch.long,
+                    device=device,
+                )
+                visual_loss = ctc_loss(visual_log_probs, targets, input_lengths, target_lengths)
+                fused_loss = ctc_loss(fused_log_probs, targets, input_lengths, target_lengths)
+                loss = fused_loss + args.aux_ctc_weight * visual_loss
+            else:
+                outputs = model(images)
+                log_probs = outputs.logits.log_softmax(dim=-1).permute(1, 0, 2)
+                input_lengths = torch.full(
+                    (images.size(0),),
+                    outputs.logits.size(1),
+                    dtype=torch.long,
+                    device=device,
+                )
+                loss = ctc_loss(log_probs, targets, input_lengths, target_lengths)
 
             optimizer.zero_grad()
             loss.backward()
@@ -209,11 +234,19 @@ def main() -> int:
                 break
 
         val_pred_file = pred_dir / "val_preds.csv"
-        val_metrics = evaluate(model, val_loader, tokenizer, device, output_file=val_pred_file)
+        val_metrics = evaluate(
+            model,
+            val_loader,
+            tokenizer,
+            device,
+            mode=args.mode,
+            output_file=val_pred_file,
+        )
         avg_train_loss = running_loss / max(steps_ran, 1)
         history.append(
             {
                 "epoch": epoch,
+                "mode": args.mode,
                 "train_loss": round(avg_train_loss, 6),
                 "val_metrics": val_metrics,
             }
@@ -226,6 +259,7 @@ def main() -> int:
             "best_line_accuracy": best_line_accuracy,
             "config": {
                 "vocab_size": tokenizer.vocab_size,
+                "mode": args.mode,
                 "hidden_size": args.hidden_size,
                 "embed_dim": args.embed_dim,
                 "img_height": args.img_height,

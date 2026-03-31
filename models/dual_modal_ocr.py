@@ -7,6 +7,11 @@ from torch import Tensor, nn
 
 
 @dataclass
+class SingleModalOutput:
+    logits: Tensor
+
+
+@dataclass
 class DualModalOutput:
     visual_logits: Tensor
     fused_logits: Tensor
@@ -85,6 +90,20 @@ class GatedFusion(nn.Module):
         return self.output_proj(fused)
 
 
+class SingleModalOCR(nn.Module):
+    def __init__(self, vocab_size: int, hidden_size: int = 256) -> None:
+        super().__init__()
+        self.vocab_size = vocab_size
+        self.hidden_size = hidden_size
+        self.visual_encoder = VisualEncoder(hidden_size=hidden_size)
+        self.classifier = nn.Linear(hidden_size, vocab_size)
+
+    def forward(self, images: Tensor) -> SingleModalOutput:
+        visual_sequence = self.visual_encoder(images)
+        logits = self.classifier(visual_sequence)
+        return SingleModalOutput(logits=logits)
+
+
 class DualModalOCR(nn.Module):
     def __init__(self, vocab_size: int, hidden_size: int = 256, embed_dim: int = 128) -> None:
         super().__init__()
@@ -137,4 +156,3 @@ class DualModalOCR(nn.Module):
             fused_logits=fused_logits,
             semantic_ids=semantic_ids,
         )
-

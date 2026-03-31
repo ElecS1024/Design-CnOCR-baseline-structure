@@ -14,7 +14,7 @@ if str(ROOT) not in sys.path:
 
 from experiments.dual_modal.data import OCRImageDataset, collate_batch
 from experiments.dual_modal.tokenizer import OCRTokenizer
-from models.dual_modal_ocr import DualModalOCR
+from models.dual_modal_ocr import DualModalOCR, SingleModalOCR
 
 
 def ctc_decode(logits: torch.Tensor, tokenizer: OCRTokenizer) -> tuple[list[str], list[float]]:
@@ -39,6 +39,7 @@ def ctc_decode(logits: torch.Tensor, tokenizer: OCRTokenizer) -> tuple[list[str]
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run dual-modal OCR prediction.")
     root = ROOT
+    parser.add_argument("--mode", choices=["dual", "single"], default="")
     default_output_dir = root / "outputs" / "dual_modal"
     parser.add_argument("--input-dir", default=str(root / "data" / "test"))
     parser.add_argument("--label-file", default=str(root / "data" / "labels_test.csv"))
@@ -52,12 +53,19 @@ def main() -> int:
 
     checkpoint = torch.load(args.checkpoint, map_location="cpu")
     config = checkpoint["config"]
+    mode = args.mode or config.get("mode", "dual")
     tokenizer = OCRTokenizer.load(Path(args.vocab_file))
-    model = DualModalOCR(
-        vocab_size=config["vocab_size"],
-        hidden_size=config["hidden_size"],
-        embed_dim=config["embed_dim"],
-    )
+    if mode == "dual":
+        model = DualModalOCR(
+            vocab_size=config["vocab_size"],
+            hidden_size=config["hidden_size"],
+            embed_dim=config["embed_dim"],
+        )
+    else:
+        model = SingleModalOCR(
+            vocab_size=config["vocab_size"],
+            hidden_size=config["hidden_size"],
+        )
     model.load_state_dict(checkpoint["model_state_dict"])
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
@@ -84,7 +92,8 @@ def main() -> int:
         for batch in dataloader:
             images = batch["images"].to(device)
             outputs = model(images)
-            pred_texts, scores = ctc_decode(outputs.fused_logits, tokenizer)
+            logits = outputs.fused_logits if mode == "dual" else outputs.logits
+            pred_texts, scores = ctc_decode(logits, tokenizer)
             for filename, gt_text, pred_text, score in zip(
                 batch["filenames"], batch["texts"], pred_texts, scores
             ):
@@ -107,7 +116,7 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"dual-modal predictions saved to: {output_file}")
+    print(f"{mode}-modal predictions saved to: {output_file}")
     print(f"images processed: {len(rows)}")
     return 0
 

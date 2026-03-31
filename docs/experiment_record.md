@@ -70,3 +70,16 @@
   - `outputs/eval/dual_modal_formal_train_summary.md`
   - `outputs/eval/dual_modal_v2_summary_table.csv`
   - `outputs/eval/dual_modal_v2_group_compare.csv`
+
+## 2026-03-31 Next Optimization Focus
+
+- New plan file: `docs/baseline_dual_modal_optimization_plan.md`
+- Primary next step:
+  - run a `single_modal` ablation model with the same visual encoder and CTC loop as the current dual-modal experiment
+- Why this matters:
+  - the current comparison `baseline vs dual_modal` changes too many factors at once
+  - adding a single-modal control is necessary to verify whether the second modality itself brings positive gains
+- Expected comparison chain:
+  - `baseline`
+  - `single_modal`
+  - `dual_modal_v2`
