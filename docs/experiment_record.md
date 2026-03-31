@@ -132,3 +132,19 @@
 - Current state:
   - the first runnable correction-model skeleton is ready
   - the next practical step is to launch a formal server-side correction experiment on `full_test_correction_errors_only` and validate on `hard_cases_correction_errors_only`
+
+## 2026-03-31 Correction Model V1 Result
+
+- Artifact backup saved locally:
+  - `artifacts/correction_model_v1`
+- Summary file:
+  - `outputs/eval/correction_model_v1_summary.md`
+- Current result:
+  - validation (`hard_cases_correction_errors_only`) line_acc=`0.020188`
+  - hard_cases line_acc=`0.041989`
+  - hard_cases char_acc=`0.000000`
+  - hard_cases avg_edit_distance=`4.741436`
+- Interpretation:
+  - the correction route has now been trained and evaluated end-to-end
+  - the current `correction_model_v1` still does not improve over raw baseline output
+  - however, all server-side assets needed to resume this route on another machine are now backed up locally

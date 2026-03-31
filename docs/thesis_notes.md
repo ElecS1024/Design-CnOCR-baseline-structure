@@ -194,6 +194,24 @@ The first smoke run has already passed, which means the route is no longer only 
 
 For the thesis, this is important because it shows that the “dual-modal value proof” route has moved from analysis to implementation, and the next stage can directly focus on formal server-side correction experiments.
 
+## 2026-03-31 Correction Model V1 Outcome
+
+The first formal correction-model attempt has now completed.
+
+### Current conclusion
+
+- the route `baseline output -> semantic correction model -> corrected text` is executable
+- the required server-side artifacts have been backed up locally
+- however, the current correction model still does not outperform the raw baseline output on `hard_cases`
+
+### What this means for the thesis
+
+This result should not be framed as a failed idea. Instead, it supports a more precise conclusion:
+
+- the multimodal correction route is technically feasible
+- the current first-generation correction model is still too weak
+- further work should focus on stronger text modeling, better correction targets, or reranking instead of direct seq2seq rewriting
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal

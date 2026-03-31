@@ -1,0 +1,29 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 4.866427,
+    "val_metrics": {
+      "total_samples": 743,
+      "exact_match_samples": 4,
+      "line_accuracy": 0.005384
+    }
+  },
+  {
+    "epoch": 2,
+    "train_loss": 3.867517,
+    "val_metrics": {
+      "total_samples": 743,
+      "exact_match_samples": 10,
+      "line_accuracy": 0.013459
+    }
+  },
+  {
+    "epoch": 3,
+    "train_loss": 3.384329,
+    "val_metrics": {
+      "total_samples": 743,
+      "exact_match_samples": 15,
+      "line_accuracy": 0.020188
+    }
+  }
+]

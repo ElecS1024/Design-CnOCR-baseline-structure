@@ -1,0 +1,8 @@
+{
+  "total_samples": 905,
+  "exact_match_samples": 38,
+  "line_accuracy": 0.041989,
+  "character_accuracy": 0.0,
+  "total_edit_distance": 4291,
+  "average_edit_distance": 4.741436
+}
