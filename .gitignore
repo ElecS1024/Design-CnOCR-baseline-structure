@@ -14,6 +14,7 @@ outputs/dual_modal*/checkpoints/
 outputs/dual_modal*/preds/*.csv
 outputs/dual_modal*/eval/*.json
 outputs/dual_modal*/logs/
+outputs/correction_model*/
 data/raw/*
 data/processed/*
 data/train/*

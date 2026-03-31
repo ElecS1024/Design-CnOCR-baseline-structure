@@ -180,6 +180,20 @@ The correction data summary shows:
 
 This means `hard_cases` is the most suitable first proving ground for the second modality, because the correction demand is much denser and the value of semantic assistance is easier to observe.
 
+## 2026-03-31 Correction Skeleton Implemented
+
+The project now contains a runnable baseline-correction experiment skeleton:
+
+- correction tokenizer
+- correction dataset loader
+- seq2seq correction model
+- correction training script
+- correction prediction script
+
+The first smoke run has already passed, which means the route is no longer only a design idea. It is now an executable experiment path.
+
+For the thesis, this is important because it shows that the “dual-modal value proof” route has moved from analysis to implementation, and the next stage can directly focus on formal server-side correction experiments.
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal

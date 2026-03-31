@@ -116,3 +116,19 @@
 - Interpretation:
   - the hard-cases subset is highly suitable for the first correction experiment
   - this supports the new route of proving multimodal value through `baseline + semantic correction`
+
+## 2026-03-31 Correction Skeleton Status
+
+- New correction experiment files:
+  - `experiments/correction/tokenizer.py`
+  - `experiments/correction/data.py`
+  - `models/correction_model.py`
+  - `scripts/12_train_correction_model.py`
+  - `scripts/13_predict_correction_model.py`
+  - `docs/baseline_correction_experiment.md`
+- Smoke training:
+  - output: `outputs/correction_model_smoke`
+  - result: training and validation path ran successfully
+- Current state:
+  - the first runnable correction-model skeleton is ready
+  - the next practical step is to launch a formal server-side correction experiment on `full_test_correction_errors_only` and validate on `hard_cases_correction_errors_only`
