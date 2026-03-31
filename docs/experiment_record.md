@@ -10,6 +10,9 @@
 | 2026-03-31 | DualModalOCR probe | train(512) / val(128) on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=8, epochs=1 | train_loss=34.843395, val_line_acc=0.000000, val_char_acc=0.000000 | server-side probe run passed; code, data, and GPU path verified |
 | 2026-03-31 | DualModalOCR formal run | train / val on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=16, epochs=2, max_steps_per_epoch=5000, num_workers=4 | train_loss=3.160761, val_line_acc=0.010665, val_char_acc=0.127606, avg_edit_distance=5.399424 | formal server-side training completed |
 | 2026-03-31 | DualModalOCR | hard_cases (905 images) on server | checkpoint=outputs/dual_modal/checkpoints/best.pt | line_acc=0.002210, char_acc=0.019276, avg_edit_distance=4.160221 | grouped hard-cases evaluation completed |
+| 2026-03-31 | DualModalOCR v2 | train / val on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=16, epochs=5, max_steps_per_epoch=8000, num_workers=4 | best_val_line_acc=0.210228, best_val_char_acc=0.560172, best_val_avg_edit_distance=2.722186 | stronger formal server run completed |
+| 2026-03-31 | DualModalOCR v2 | hard_cases (905 images) on server | checkpoint=outputs/dual_modal_v2/checkpoints/best.pt | line_acc=0.041989, char_acc=0.160719, avg_edit_distance=3.560221 | grouped hard-cases evaluation completed |
+| 2026-03-31 | DualModalOCR v2 | full_test (128610 images) on server | checkpoint=outputs/dual_modal_v2/checkpoints/best.pt | line_acc=0.210054, char_acc=0.557444, avg_edit_distance=2.733979 | grouped full-test evaluation completed |
 
 ## Current Baseline Summary
 
@@ -65,3 +68,5 @@
 - Formal training summary saved locally:
   - `outputs/eval/dual_modal_formal_train_history.csv`
   - `outputs/eval/dual_modal_formal_train_summary.md`
+  - `outputs/eval/dual_modal_v2_summary_table.csv`
+  - `outputs/eval/dual_modal_v2_group_compare.csv`

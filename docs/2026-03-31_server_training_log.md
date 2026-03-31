@@ -139,6 +139,42 @@ Interpretation:
 - validation metrics improved in the expected direction
 - the dual-modal training path is stable enough to continue with `hard_cases` and `full_test` evaluation
 
+## Dual-Modal V2 Result
+
+An extended server-side training run (`dual_modal_v2`) was then completed with:
+
+- `epochs=5`
+- `batch_size=16`
+- `max_steps_per_epoch=8000`
+- output dir: `outputs/dual_modal_v2`
+
+Best validation result:
+
+- `line_acc=0.210228`
+- `char_acc=0.560172`
+- `avg_edit_distance=2.722186`
+
+Hard-cases result:
+
+- `line_acc=0.041989`
+- `char_acc=0.160719`
+- `avg_edit_distance=3.560221`
+
+Full-test result:
+
+- `line_acc=0.210054`
+- `char_acc=0.557444`
+- `avg_edit_distance=2.733979`
+
+Current conclusion:
+
+- `dual_modal_v2` is clearly stronger than the earlier short dual-modal checkpoints
+- but it still remains below the baseline result on both `hard_cases` and `full_test`
+- therefore, before thesis writing starts, the experimental materials should be organized as:
+  - baseline final result
+  - dual-modal implementation result
+  - honest comparison and discussion of why the current improved model has not yet surpassed the baseline
+
 ## Next Steps
 
 1. Wait for the formal training run to finish.

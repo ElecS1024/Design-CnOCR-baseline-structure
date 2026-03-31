@@ -52,6 +52,51 @@ Current observation:
 - the first formal server run proves that the training path is stable, but this checkpoint is not yet strong enough to claim improvement
 - for the thesis, this result should be described honestly as an early-stage formal training result rather than a final improved model
 
+## 2026-03-31 Dual-Modal V2 Result
+
+- Model tag: `dual_modal_v2`
+- Server config:
+  - GPU: `Tesla P100-PCIE-16GB`
+  - torch runtime: `2.9.1+cu126`
+  - epochs: `5`
+  - batch_size: `16`
+  - max_steps_per_epoch: `8000`
+
+### Validation Result
+
+- `line_acc=0.210228`
+- `char_acc=0.560172`
+- `avg_edit_distance=2.722186`
+
+### Hard Cases Result
+
+- `line_acc=0.041989`
+- `char_acc=0.160719`
+- `avg_edit_distance=3.560221`
+
+### Full Test Result
+
+- `line_acc=0.210054`
+- `char_acc=0.557444`
+- `avg_edit_distance=2.733979`
+
+### Baseline Comparison Note
+
+- `dual_modal_v2` is much stronger than the earlier short dual-modal runs.
+- However, it is still below the baseline on both `hard_cases` and `full_test`.
+- This means the current improved pipeline is technically stable and has meaningful training progress, but the present checkpoint still cannot be written as a final outperforming model.
+- In the thesis, the most appropriate framing is:
+  - the dual-modal method was successfully designed and implemented
+  - server-side training and evaluation were completed
+  - the current version still needs further tuning before it can surpass the baseline
+
+### Files Ready for Thesis Use
+
+- `outputs/eval/dual_modal_formal_train_summary.md`
+- `outputs/eval/dual_modal_hard_cases_summary.md`
+- `outputs/eval/dual_modal_v2_summary_table.md`
+- `outputs/eval/dual_modal_v2_group_compare.md`
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal

@@ -1,0 +1,5 @@
+dataset,samples,exact_match_samples,line_accuracy,character_accuracy,total_edit_distance,average_edit_distance
+hard_cases_baseline,905,162,0.179006,0.324043,2595,2.867403
+hard_cases_dual_modal_v2,905,38,0.041989,0.160719,3222,3.560221
+full_test_baseline,128610,68803,0.534974,0.762601,188617,1.466581
+full_test_dual_modal_v2,128610,27015,0.210054,0.557444,351617,2.733979
