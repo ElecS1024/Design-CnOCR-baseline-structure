@@ -8,7 +8,7 @@
 | 2026-03-17 | CnOCR default model | sample (50 images) | onnxruntime backend, default recognizer | line_acc=0.800, char_acc=0.950954, avg_edit_distance=0.36 | baseline inference, evaluation, and case visualization completed |
 | 2026-03-17 | CnOCR default model | hard_cases (905 images) | onnxruntime backend, default recognizer | line_acc=0.179006, char_acc=0.324043, avg_edit_distance=2.867403 | grouped evaluation completed on difficult subsets |
 | 2026-03-31 | DualModalOCR probe | train(512) / val(128) on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=8, epochs=1 | train_loss=34.843395, val_line_acc=0.000000, val_char_acc=0.000000 | server-side probe run passed; code, data, and GPU path verified |
-| 2026-03-31 | DualModalOCR formal run | train / val on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=16, epochs=2, max_steps_per_epoch=5000, num_workers=4 | running | background training launched on server, main pid=5844 |
+| 2026-03-31 | DualModalOCR formal run | train / val on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=16, epochs=2, max_steps_per_epoch=5000, num_workers=4 | train_loss=3.160761, val_line_acc=0.010665, val_char_acc=0.127606, avg_edit_distance=5.399424 | formal server-side training completed |
 
 ## Current Baseline Summary
 
@@ -61,3 +61,6 @@
   - `data/train`, `data/val`, `data/test`, `data/processed/hard_cases_eval` uploaded and extracted on server
 - Formal training log:
   - server path: `/root/Design-CnOCR-baseline-structure/outputs/dual_modal/logs/train.log`
+- Formal training summary saved locally:
+  - `outputs/eval/dual_modal_formal_train_history.csv`
+  - `outputs/eval/dual_modal_formal_train_summary.md`

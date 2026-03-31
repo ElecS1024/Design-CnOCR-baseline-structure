@@ -1,0 +1,3 @@
+epoch,train_loss,val_total_samples,val_exact_match_samples,val_line_accuracy,val_character_accuracy,val_total_edit_distance,val_average_edit_distance
+1,5.969488,127704,395,0.003093,0.023286,771981,6.045081
+2,3.160761,127704,1362,0.010665,0.127606,689528,5.399424

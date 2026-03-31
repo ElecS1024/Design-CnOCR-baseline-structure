@@ -105,6 +105,40 @@ Server log target:
 
 - `/root/Design-CnOCR-baseline-structure/outputs/dual_modal/logs/train.log`
 
+## Formal Training Result
+
+The formal server-side run has completed.
+
+Final recorded training summary:
+
+- epoch count: `2`
+- final train loss: `3.160761`
+- validation total samples: `127704`
+- validation exact match samples: `1362`
+- validation line accuracy: `0.010665`
+- validation character accuracy: `0.127606`
+- validation total edit distance: `689528`
+- validation average edit distance: `5.399424`
+
+Epoch-level history:
+
+- Epoch 1:
+  - train loss: `5.969488`
+  - val line accuracy: `0.003093`
+  - val character accuracy: `0.023286`
+  - val average edit distance: `6.045081`
+- Epoch 2:
+  - train loss: `3.160761`
+  - val line accuracy: `0.010665`
+  - val character accuracy: `0.127606`
+  - val average edit distance: `5.399424`
+
+Interpretation:
+
+- training loss decreased clearly from epoch 1 to epoch 2
+- validation metrics improved in the expected direction
+- the dual-modal training path is stable enough to continue with `hard_cases` and `full_test` evaluation
+
 ## Next Steps
 
 1. Wait for the formal training run to finish.

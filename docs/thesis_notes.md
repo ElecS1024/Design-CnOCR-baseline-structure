@@ -22,7 +22,14 @@
 - All formal data splits were uploaded and extracted on the server.
 - The first GPU attempt with `torch 2.9.1+cu128` failed because `P100` is `sm_60`.
 - The server runtime was switched to `torch 2.9.1+cu126`, after which a dual-modal probe run completed successfully.
-- Formal server-side dual-modal training has been launched and is currently running in background mode.
+- Formal server-side dual-modal training has completed.
+- Current formal validation result:
+  - `line_acc=0.010665`
+  - `char_acc=0.127606`
+  - `avg_edit_distance=5.399424`
+- Epoch-level trend:
+  - Epoch 1: `train_loss=5.969488`, `val_line_acc=0.003093`, `val_char_acc=0.023286`
+  - Epoch 2: `train_loss=3.160761`, `val_line_acc=0.010665`, `val_char_acc=0.127606`
 
 ## Baseline Experiment Draft
 
