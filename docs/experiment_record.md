@@ -13,6 +13,9 @@
 | 2026-03-31 | DualModalOCR v2 | train / val on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=16, epochs=5, max_steps_per_epoch=8000, num_workers=4 | best_val_line_acc=0.210228, best_val_char_acc=0.560172, best_val_avg_edit_distance=2.722186 | stronger formal server run completed |
 | 2026-03-31 | DualModalOCR v2 | hard_cases (905 images) on server | checkpoint=outputs/dual_modal_v2/checkpoints/best.pt | line_acc=0.041989, char_acc=0.160719, avg_edit_distance=3.560221 | grouped hard-cases evaluation completed |
 | 2026-03-31 | DualModalOCR v2 | full_test (128610 images) on server | checkpoint=outputs/dual_modal_v2/checkpoints/best.pt | line_acc=0.210054, char_acc=0.557444, avg_edit_distance=2.733979 | grouped full-test evaluation completed |
+| 2026-03-31 | SingleModalOCR v1 | train / val on server | server=Tesla P100 16GB, torch=2.9.1+cu126, batch_size=16, epochs=5, max_steps_per_epoch=8000, num_workers=4 | best_val_line_acc=0.397200, best_val_char_acc=0.691481, best_val_avg_edit_distance=1.909486 | ablation control run completed |
+| 2026-03-31 | SingleModalOCR v1 | hard_cases (905 images) on server | checkpoint=outputs/single_modal_v1/checkpoints/best.pt | line_acc=0.078453, char_acc=0.200573, avg_edit_distance=3.391160 | grouped hard-cases ablation evaluation completed |
+| 2026-03-31 | SingleModalOCR v1 | full_test (128610 images) on server | checkpoint=outputs/single_modal_v1/checkpoints/best.pt | line_acc=0.394052, char_acc=0.688281, avg_edit_distance=1.925706 | grouped full-test ablation evaluation completed |
 
 ## Current Baseline Summary
 
@@ -83,3 +86,15 @@
   - `baseline`
   - `single_modal`
   - `dual_modal_v2`
+
+## 2026-03-31 Ablation Conclusion
+
+- Three-way comparison files:
+  - `outputs/eval/ablation_three_way_summary.csv`
+  - `outputs/eval/ablation_three_way_summary.md`
+  - `outputs/eval/ablation_three_way_group_compare.csv`
+  - `outputs/eval/ablation_three_way_group_compare.md`
+- Current conclusion:
+  - `baseline > single_modal_v1 > dual_modal_v2` on both `hard_cases` and `full_test`
+  - the current semantic branch does not yet provide a positive gain over the matched visual-only control
+  - the next optimization should focus on redesigning semantic input or hard-case-focused training rather than simply extending training time

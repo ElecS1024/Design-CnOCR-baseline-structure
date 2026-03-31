@@ -120,6 +120,33 @@ If the result shows `single_modal < dual_modal`, then the thesis can reasonably 
 - Third, add a single-modal ablation experiment.
 - Finally, analyze whether the semantic branch improves the model on difficult subsets such as `vertical_text`, `oblique_or_curved`, and `occlusion`.
 
+## 2026-03-31 Single-Modal Ablation Result
+
+### Controlled Ablation Outcome
+
+The completed ablation experiment now gives a clear ranking:
+
+- `baseline > single_modal_v1 > dual_modal_v2` on `hard_cases`
+- `baseline > single_modal_v1 > dual_modal_v2` on `full_test`
+
+This means the current visual-only control model is already stronger than the present dual-modal design. Therefore, the semantic branch in its current form cannot yet be described as a positive optimization.
+
+### Thesis Interpretation
+
+This result is still useful for the thesis because it answers the key ablation question directly:
+
+- the current dual-modal pipeline is technically feasible
+- the server-side training and evaluation path is complete
+- however, the present semantic branch does not yet outperform the matched visual-only model
+
+So the thesis can honestly conclude that the current multimodal design has implementation validity, but its fusion strategy and semantic input still need further refinement.
+
+### Most Important Next Optimization Directions
+
+- redesign the semantic branch input so that training and inference are more consistent
+- try hard-case-focused reweighting or oversampling
+- consider changing the role of the second modality from direct fusion to post-recognition correction or reranking
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal
