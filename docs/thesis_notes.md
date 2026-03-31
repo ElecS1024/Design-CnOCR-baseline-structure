@@ -12,6 +12,18 @@
 - Save baseline prediction files and visualized cases for later figures.
 - Keep train/val/test split rules fixed once the formal experiments begin.
 
+## 2026-03-31 Server Training Progress
+
+- Remote training server has been prepared successfully.
+- Server profile:
+  - GPU: `Tesla P100-PCIE-16GB`
+  - OS: `Ubuntu 20.04`
+  - Driver / CUDA: `570.195.03 / 12.8`
+- All formal data splits were uploaded and extracted on the server.
+- The first GPU attempt with `torch 2.9.1+cu128` failed because `P100` is `sm_60`.
+- The server runtime was switched to `torch 2.9.1+cu126`, after which a dual-modal probe run completed successfully.
+- Formal server-side dual-modal training has been launched and is currently running in background mode.
+
 ## Baseline Experiment Draft
 
 ### 1. Experiment Goal
@@ -89,6 +101,27 @@
 - 按场景、文档、网页和困难样本类型分别统计结果，形成分组对比。
 - 基于错误案例分析决定是否引入数据增强、模型微调或特定类型样本补充。
 - 将实验结果整理为论文第五章中的结果表和案例分析图。
+
+## Dual-Modal Module Draft
+
+### 1. 改进思路
+
+针对 baseline 在困难样本、竖排文本和倾斜弯曲文本上的表现不足，本文在原有视觉识别链路基础上增加文本语义辅助分支，构建双模态识别模型。该模型以图像视觉特征为主模态，以字符语义特征为辅助模态，在识别头前通过门控融合实现特征整合，以提升复杂样本条件下的识别鲁棒性。
+
+### 2. 模型结构
+
+- 视觉分支：卷积特征提取 + 序列编码
+- 语义分支：字符嵌入 + 双向 GRU
+- 融合位置：识别头之前
+- 融合方式：门控融合
+- 输出：保持与 baseline 一致的字符序列预测结果
+
+### 3. 训练与推理机制
+
+- 训练阶段：语义模态使用真实标签构建
+- 推理阶段：语义模态使用视觉分支的初步预测构建
+
+这种设计既保证了训练阶段语义信息稳定，又能在推理阶段保持模型独立完成识别任务，不依赖人工标签输入。
 
 ## Hard Cases Experiment Draft
 

@@ -23,8 +23,10 @@ def main() -> int:
 
     entries = [
         ("sample_baseline", root / "outputs" / "eval" / "baseline_metrics.json"),
-        ("hard_cases", root / "outputs" / "eval" / "hard_cases_metrics.json"),
-        ("full_test", root / "outputs" / "eval" / "test_metrics.json"),
+        ("baseline_hard_cases", root / "outputs" / "eval" / "hard_cases_metrics.json"),
+        ("baseline_full_test", root / "outputs" / "eval" / "test_metrics.json"),
+        ("dual_modal_hard_cases", root / "outputs" / "dual_modal" / "eval" / "hard_cases_metrics.json"),
+        ("dual_modal_full_test", root / "outputs" / "dual_modal" / "eval" / "test_metrics.json"),
     ]
 
     rows = []

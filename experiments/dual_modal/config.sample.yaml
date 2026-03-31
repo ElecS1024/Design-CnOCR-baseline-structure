@@ -1,0 +1,18 @@
+model:
+  hidden_size: 256
+  embed_dim: 128
+
+data:
+  img_height: 32
+  img_width: 320
+
+train:
+  batch_size: 32
+  epochs: 5
+  learning_rate: 0.001
+  aux_ctc_weight: 0.3
+
+notes:
+  - 训练阶段语义模态使用真实标签
+  - 推理阶段语义模态使用视觉分支初步预测
+  - 首版融合策略固定为门控融合

@@ -7,6 +7,13 @@ venv/
 outputs/preds/*.csv
 outputs/eval/*.json
 outputs/logs/*
+outputs/dual_modal_smoke/
+outputs/dual_modal_probe/
+outputs/dual_modal/
+outputs/dual_modal*/checkpoints/
+outputs/dual_modal*/preds/*.csv
+outputs/dual_modal*/eval/*.json
+outputs/dual_modal*/logs/
 data/raw/*
 data/processed/*
 data/train/*
@@ -15,3 +22,4 @@ data/test/*
 !data/sample/
 !data/sample/.gitkeep
 *_preview.png
+transfer_archives/
